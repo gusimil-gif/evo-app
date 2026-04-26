@@ -8,6 +8,10 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   title: "EVO | Gestão de Estoque e Orçamentos",
   description: "Sistema premium de gestão de estoque, orçamentos e pedidos para a marca EVO.",
+  icons: {
+    icon: "/logo-evo.png",
+    apple: "/logo-evo.png",
+  }
 };
 
 export default function RootLayout({
