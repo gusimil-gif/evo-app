@@ -37,6 +37,15 @@ export default function ClientesPage() {
     setLoading(true); load();
   };
 
+  const handleDelete = async (e: React.MouseEvent, id: string, name: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm(`Deseja realmente excluir o cliente ${name}?`)) return;
+    
+    await fetch(`/api/clientes/${id}`, { method: "DELETE" });
+    load();
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -83,7 +92,16 @@ export default function ClientesPage() {
                 <div className={styles.name}>{c.name}</div>
                 <div className={styles.meta}>{[c.phone, c.email].filter(Boolean).join(" · ")}</div>
               </div>
-              <span className={styles.arrow}>›</span>
+              <div className={styles.actions}>
+                <button 
+                  className={styles.btnDelete} 
+                  onClick={(e) => handleDelete(e, c.id, c.name)}
+                  title="Excluir cliente"
+                >
+                  🗑
+                </button>
+                <span className={styles.arrow}>›</span>
+              </div>
             </Link>
           ))}
         </div>

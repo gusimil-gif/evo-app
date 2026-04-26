@@ -53,4 +53,12 @@
 .info { flex: 1; }
 .name { font-weight: 600; font-size: 0.95rem; }
 .meta { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+.actions { display: flex; align-items: center; gap: 0.75rem; }
+.btnDelete {
+  background: transparent; border: none; color: var(--muted);
+  font-size: 1.1rem; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.4rem; border-radius: 4px;
+}
+.btnDelete:hover { color: #ef4444; background: #fef2f2; }
 .arrow { color: var(--muted); font-size: 1.2rem; }
