@@ -33,7 +33,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* SIDEBAR (Desktop) */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <img src="/logo-dark.png" alt="EVO" className={styles.logoImg} />
+          <img 
+            src="/logo-dark.png" 
+            alt="EVO" 
+            className={styles.logoImg} 
+            width={140}
+            height={40}
+            style={{ objectFit: 'contain' }}
+          />
           <div className={styles.logoSub}>Gestão de Estoque</div>
         </div>
 

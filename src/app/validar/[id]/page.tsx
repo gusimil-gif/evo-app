@@ -62,7 +62,14 @@ export default function ValidarPublicPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <img src="/logo-dark.png" alt="EVO" className={styles.logo} />
+        <img 
+          src="/logo-dark.png" 
+          alt="EVO" 
+          className={styles.logo} 
+          width={120} 
+          height={34} 
+          style={{ objectFit: 'contain' }}
+        />
         <div className={styles.badge}>VALIDE SEU PEDIDO</div>
       </header>
 

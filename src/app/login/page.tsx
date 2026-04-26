@@ -40,7 +40,11 @@ export default function LoginPage() {
     <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
       <div className="premium-card" style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <img src="/logo-dark.png" alt="EVO" style={{ maxWidth: '180px', marginBottom: '1rem' }} />
+          <img 
+            src="/logo-dark.png" 
+            alt="EVO" 
+            style={{ maxWidth: '180px', height: 'auto', marginBottom: '1rem', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} 
+          />
           <p className="subtitle">GESTÃO DE ESTOQUE</p>
         </div>
 
