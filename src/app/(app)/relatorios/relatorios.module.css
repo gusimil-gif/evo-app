@@ -23,7 +23,7 @@
 
 .statLabel { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .statValue { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
-.statFooter { font-size: 0.75rem; color: #999; }
+.statFooter { font-size: 0.75rem; color: var(--muted); }
 
 .detailsGrid {
   display: grid;
@@ -33,14 +33,18 @@
 @media (max-width: 768px) { .detailsGrid { grid-template-columns: 1fr; } }
 
 .infoBox {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   padding: 1.5rem;
   border-radius: 12px;
 }
-.infoBox h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.infoBox p { font-size: 0.9rem; color: #475569; margin-bottom: 0.75rem; line-height: 1.5; }
+.infoBox h3 { 
+  color: var(--foreground);
+  font-size: 1rem; font-weight: 700; margin-bottom: 1rem; 
+  display: flex; align-items: center; gap: 0.5rem; 
+}
+.infoBox p { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem; line-height: 1.5; }
 .infoBox ul { padding-left: 1.25rem; margin-top: 1rem; }
-.infoBox li { font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem; }
+.infoBox li { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.5rem; }
 
 .loading { padding: 4rem; text-align: center; color: var(--muted); font-size: 1rem; }
