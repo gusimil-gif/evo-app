@@ -13,6 +13,13 @@ const PAYMENT_OPTIONS = [
   "Outro",
 ];
 
+const DELIVERY_OPTIONS = [
+  "30 Dias",
+  "45 Dias",
+  "60 Dias",
+  "À Definir",
+];
+
 interface Cliente { id: string; name: string; phone?: string; }
 interface Product { id: string; sku: string; name?: string; description?: string; price: number; stock: number; color?: string; type?: string; }
 interface Item {
@@ -42,6 +49,7 @@ function NovoOrcamentoForm() {
   const [products, setProducts] = useState<Product[]>([]);
   const [clienteId, setClienteId] = useState(preClienteId);
   const [paymentCond, setPaymentCond] = useState(PAYMENT_OPTIONS[0]);
+  const [deliveryTime, setDeliveryTime] = useState(DELIVERY_OPTIONS[0]);
   const [customPayment, setCustomPayment] = useState("");
   const [obs, setObs] = useState("");
   const [items, setItems] = useState<Item[]>([]);
@@ -108,6 +116,7 @@ function NovoOrcamentoForm() {
         body: JSON.stringify({
           customerId: clienteId,
           paymentCond: paymentCond === "Outro" ? customPayment : paymentCond,
+          deliveryTime,
           obs,
           items: items.map((it) => ({
             productId: it.productId,
@@ -277,6 +286,16 @@ function NovoOrcamentoForm() {
             placeholder="Descreva as condições de pagamento..."
             value={customPayment} onChange={(e) => setCustomPayment(e.target.value)} />
         )}
+      </div>
+
+      <div className={styles.card}>
+        <h2 className={styles.cardTitle}>Prazo de Entrega</h2>
+        <div className={styles.paymentOpts}>
+          {DELIVERY_OPTIONS.map((opt) => (
+            <button key={opt} className={`${styles.payOpt} ${deliveryTime === opt ? styles.payOptActive : ""}`}
+              onClick={() => setDeliveryTime(opt)}>{opt}</button>
+          ))}
+        </div>
       </div>
 
       <div className={styles.card}>

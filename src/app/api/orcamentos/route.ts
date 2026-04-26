@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { customerId, paymentCond, obs, items } = body;
+  const { customerId, paymentCond, deliveryTime, obs, items } = body;
 
   if (!customerId || !items || items.length === 0) {
     return NextResponse.json({ error: "Cliente e itens são obrigatórios" }, { status: 400 });
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       data: {
         customerId,
         paymentCond,
+        deliveryTime,
         obs,
         items: {
           create: items.map((item: any) => ({

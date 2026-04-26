@@ -10,7 +10,7 @@ interface OrcamentoItem {
   defaultPrice: number; appliedPrice: number; quantity: number; total: number;
 }
 interface Orcamento {
-  id: string; date: string; status: string; paymentCond?: string; obs?: string;
+  id: string; date: string; status: string; paymentCond?: string; deliveryTime?: string; obs?: string;
   customer: { id: string; name: string; phone?: string; email?: string; address?: string };
   items: OrcamentoItem[];
   signatureName?: string;
@@ -254,6 +254,13 @@ export default function OrcamentoDetalhePage() {
       doc.text(orc.paymentCond, margin, y); y += 12;
     }
 
+    if (orc.deliveryTime) {
+      doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
+      doc.text("Prazo de Entrega:", W - margin - 40, y - 18, { align: "right" });
+      doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
+      doc.text(orc.deliveryTime, W - margin, y - 18, { align: "right" });
+    }
+
     if (orc.obs) {
       doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
       const lines = doc.splitTextToSize("Observações: " + orc.obs, W - margin * 2);
@@ -425,6 +432,12 @@ export default function OrcamentoDetalhePage() {
         <div className={styles.card}>
           <div className={styles.cardLabel}>Condições de Pagamento</div>
           <div className={styles.paymentText}>{orc.paymentCond || "Não informado"}</div>
+          {orc.deliveryTime && (
+            <>
+              <div className={styles.cardLabel} style={{ marginTop: "1rem" }}>Prazo de Entrega</div>
+              <div className={styles.paymentText}>{orc.deliveryTime}</div>
+            </>
+          )}
           {orc.obs && <><div className={styles.cardLabel} style={{ marginTop: "1rem" }}>Observações</div>
             <div className={styles.obsText}>{orc.obs}</div></>}
         </div>
