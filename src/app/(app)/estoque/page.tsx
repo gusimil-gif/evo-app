@@ -5,7 +5,7 @@ import Link from "next/link";
 import styles from "./estoque.module.css";
 
 interface Product {
-  id: string; sku: string; name?: string; type?: string; color?: string;
+  id: string; sku: string; name?: string; description?: string; type?: string; color?: string;
   stock: number; price: number; active: boolean;
 }
 
@@ -25,6 +25,7 @@ export default function EstoquePage() {
     const matchSearch = !search ||
       p.sku.toLowerCase().includes(search.toLowerCase()) ||
       (p.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      (p.description ?? "").toLowerCase().includes(search.toLowerCase()) ||
       (p.type ?? "").toLowerCase().includes(search.toLowerCase()) ||
       (p.color ?? "").toLowerCase().includes(search.toLowerCase());
 
@@ -98,7 +99,7 @@ export default function EstoquePage() {
           ) : filtered.map((p) => (
             <div key={p.id} className={styles.tableRow}>
               <span className={styles.sku}>{p.sku}</span>
-              <span className={styles.name}>{p.name || p.sku}</span>
+              <span className={styles.name}>{p.description || p.name || p.sku}</span>
               <span className={styles.muted}>{[p.type, p.color].filter(Boolean).join(" - ")}</span>
               <span className={styles.right}>{p.price > 0 ? `R$ ${p.price.toFixed(2).replace(".", ",")}` : "—"}</span>
               <span className={`${styles.right} ${styles.stockQty} ${p.stock === 0 ? styles.stockZero : p.stock <= 3 ? styles.stockLow : ""}`}>

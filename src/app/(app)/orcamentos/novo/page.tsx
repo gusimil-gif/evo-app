@@ -14,7 +14,7 @@ const PAYMENT_OPTIONS = [
 ];
 
 interface Cliente { id: string; name: string; phone?: string; }
-interface Product { id: string; sku: string; name?: string; price: number; stock: number; color?: string; type?: string; }
+interface Product { id: string; sku: string; name?: string; description?: string; price: number; stock: number; color?: string; type?: string; }
 interface Item {
   productId: string;
   sku: string;
@@ -65,7 +65,7 @@ function NovoOrcamentoForm() {
       setProdResults(products.filter((p) =>
         p.sku.toLowerCase().includes(q) || 
         (p.name ?? "").toLowerCase().includes(q) || 
-        (p.name ?? "").toLowerCase().includes(q) ||
+        (p.description ?? "").toLowerCase().includes(q) ||
         (p.type ?? "").toLowerCase().includes(q) ||
         (p.color ?? "").toLowerCase().includes(q)
       ).slice(0, 50));
@@ -76,8 +76,8 @@ function NovoOrcamentoForm() {
     setItems([...items, { 
       productId: p.id, 
       sku: p.sku, 
-      name: p.name || p.sku, 
-      description: p.name || p.sku, 
+      name: p.description || p.name || p.sku, 
+      description: p.description || p.name || p.sku, 
       color: p.color || "",
       defaultPrice: p.price, 
       appliedPrice: p.price.toString(), 
@@ -231,7 +231,7 @@ function NovoOrcamentoForm() {
                     <div className={styles.prodOptionMain}>
                       <span className={styles.prodOptionSku}>{p.sku}</span>
                       <span className={styles.prodOptionName}>
-                        {p.name || p.sku} 
+                        {p.description || p.name || p.sku} 
                         {p.color ? ` — ${p.color}` : ""}
                       </span>
                     </div>
