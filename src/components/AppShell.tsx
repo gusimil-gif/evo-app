@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./AppShell.module.css";
@@ -33,13 +34,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* SIDEBAR (Desktop) */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <img 
+          <Image 
             src="/logo-dark.png" 
             alt="EVO" 
             className={styles.logoImg} 
             width={140}
             height={40}
             style={{ objectFit: 'contain' }}
+            priority
           />
           <div className={styles.logoSub}>Gestão de Estoque</div>
         </div>

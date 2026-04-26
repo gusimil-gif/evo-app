@@ -26,6 +26,17 @@ export async function GET(req: Request) {
         } : {},
       ],
     },
+    select: {
+      id: true,
+      sku: true,
+      name: true,
+      description: true,
+      price: true,
+      stock: true,
+      type: true,
+      color: true,
+      active: true,
+    },
     orderBy: { sku: "asc" },
   });
 

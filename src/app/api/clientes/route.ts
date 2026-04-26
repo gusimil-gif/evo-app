@@ -18,6 +18,13 @@ export async function GET(req: Request) {
         { document: { contains: q } },
       ],
     } : {},
+    select: {
+      id: true,
+      name: true,
+      phone: true,
+      email: true,
+      document: true,
+    },
     orderBy: { name: "asc" },
   });
 
