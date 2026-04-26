@@ -59,7 +59,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const { password } = await req.json();
 
     // Buscar o usuário atual para validar a senha
-    const user = await db.user.findUnique({ where: { id: session.userId } });
+    const user = await db.user.findUnique({ where: { id: session.userId as string } });
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const isValid = await bcrypt.compare(password, user.password);
