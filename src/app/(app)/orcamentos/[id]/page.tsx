@@ -42,7 +42,7 @@ export default function OrcamentoDetalhePage() {
     fetch(`/api/orcamentos/${id}`).then((r) => r.json())
       .then((d) => { setOrc(d); setLoading(false); });
   };
-  useEffect(load, [id]);
+  useEffect(() => { load(); }, [id]);
 
   const updateStatus = async (status: string) => {
     setUpdatingStatus(true);

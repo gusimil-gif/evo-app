@@ -13,7 +13,7 @@ export default function UsuariosPage() {
   const [saving, setSaving] = useState(false);
 
   const load = () => fetch("/api/usuarios").then((r) => r.json()).then((d) => { setUsers(d); setLoading(false); });
-  useEffect(load, []);
+  useEffect(() => { load(); }, []);
   const set = (f: string, v: string) => setForm((p) => ({ ...p, [f]: v }));
 
   const handleSave = async (e: React.FormEvent) => {

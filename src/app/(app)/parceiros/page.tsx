@@ -34,7 +34,7 @@ export default function ParceirosPage() {
         setLoading(false);
       });
   };
-  useEffect(load, []);
+  useEffect(() => { load(); }, []);
 
   const handleSave = async () => {
     if (!form.name) return alert("Nome é obrigatório");
