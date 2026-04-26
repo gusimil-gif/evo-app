@@ -111,3 +111,35 @@
 }
 .btnSave:hover { opacity: 0.8; }
 .btnSave:disabled { opacity: 0.5; cursor: not-allowed; }
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .header { gap: 0.25rem; }
+  .title { font-size: 1.25rem; }
+  .card { padding: 1rem; gap: 0.75rem; }
+  
+  .itemsTable { border: none; }
+  .tableHead { display: none; }
+  .tableRow {
+    display: flex; flex-direction: column; align-items: stretch; gap: 0.75rem;
+    min-width: 0; padding: 1.25rem 0; border-top: 1px solid var(--border);
+    position: relative;
+  }
+  .tableRow:first-child { border-top: none; }
+  
+  .tableRow > div:not(.prodInfo) {
+    display: flex; justify-content: space-between; align-items: center; text-align: right;
+  }
+  .tableRow > div:not(.prodInfo)::before {
+    content: attr(data-label);
+    font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase;
+  }
+  
+  .btnRemove { position: absolute; top: 0.5rem; right: 0; }
+  
+  .prodDropdown { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000; max-height: 100vh; }
+  .btnCloseDropdown { padding: 0.75rem 1rem; font-size: 0.9rem; }
+  
+  .paymentOpts { grid-template-columns: 1fr; }
+  .actions { flex-direction: column; }
+  .btnSave, .btnCancel { width: 100%; justify-content: center; padding: 1rem; }
+}

@@ -281,7 +281,26 @@ export default function OrcamentoDetalhePage() {
     doc.text("EVO — Artigos em Couro Premium", W / 2, footY + 5, { align: "center" });
     doc.text(`Orçamento válido por 7 dias | Gerado em ${new Date().toLocaleDateString("pt-BR")}`, W / 2, footY + 9, { align: "center" });
 
-    doc.save(`EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`);
+    // Gerar o blob do PDF para compartilhamento
+    const pdfBlob = doc.output('blob');
+    const pdfFile = new File([pdfBlob], `EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`, { type: 'application/pdf' });
+
+    // Se estiver no mobile e suportar compartilhamento de arquivos
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      try {
+        await navigator.share({
+          files: [pdfFile],
+          title: `Orçamento EVO - ${orc.customer.name}`,
+          text: `Olá, segue o orçamento da EVO.`
+        });
+      } catch (err) {
+        // Se o usuário cancelar ou der erro, tenta o download normal
+        doc.save(`EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`);
+      }
+    } else {
+      // Desktop ou navegador sem suporte a share: Download normal
+      doc.save(`EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`);
+    }
   };
     
 
@@ -427,10 +446,10 @@ export default function OrcamentoDetalhePage() {
                 <span className={styles.sku}>{it.sku}</span>
                 <span className={styles.name}>{it.description}</span>
               </div>
-              <div className={styles.colorVal}>{it.color || "—"}</div>
-              <div className={styles.right}>{formatCurrency(it.appliedPrice)}</div>
-              <div className={styles.right}>{it.quantity}</div>
-              <div className={styles.right} style={{ fontWeight: 600 }}>{formatCurrency(it.total)}</div>
+              <div className={styles.colorVal} data-label="Cor">{it.color || "—"}</div>
+              <div className={styles.right} data-label="Preço">{formatCurrency(it.appliedPrice)}</div>
+              <div className={styles.right} data-label="Qtd">{it.quantity}</div>
+              <div className={styles.right} style={{ fontWeight: 600 }} data-label="Total">{formatCurrency(it.total)}</div>
             </div>
           ))}
         </div>

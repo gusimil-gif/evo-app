@@ -176,9 +176,9 @@ function NovoOrcamentoForm() {
                   <span className={styles.sku}>{item.sku}</span>
                   <span className={styles.name}>{item.name}</span>
                 </div>
-                <div className={styles.colorVal}>{item.color || "—"}</div>
-                <div className={styles.right}>{formatCurrency(item.defaultPrice)}</div>
-                <div className={styles.priceInputWrapper}>
+                <div className={styles.colorVal} data-label="Cor">{item.color || "—"}</div>
+                <div className={styles.right} data-label="Padrão">{formatCurrency(item.defaultPrice)}</div>
+                <div className={styles.priceInputWrapper} data-label="Praticado">
                   <span className={styles.currencyPrefix}>R$</span>
                   <input 
                     type="number" 
@@ -189,7 +189,7 @@ function NovoOrcamentoForm() {
                     style={{ width: '100px' }}
                   />
                 </div>
-                <div className={styles.right}>
+                <div className={styles.right} data-label="Qtd">
                   <input 
                     type="number" 
                     className={styles.miniInput} 
@@ -198,7 +198,7 @@ function NovoOrcamentoForm() {
                     onChange={(e) => updateItem(idx, "quantity", e.target.value)} 
                   />
                 </div>
-                <div className={styles.right} style={{ fontWeight: 700 }}>
+                <div className={styles.right} style={{ fontWeight: 700 }} data-label="Total">
                   {formatCurrency((parseFloat(item.appliedPrice) || 0) * (parseInt(item.quantity) || 0))}
                 </div>
                 <button className={styles.btnRemove} onClick={() => setItems(items.filter((_, i) => i !== idx))}>✕</button>
