@@ -14,11 +14,12 @@ const PAYMENT_OPTIONS = [
 ];
 
 interface Cliente { id: string; name: string; phone?: string; }
-interface Product { id: string; sku: string; name?: string; description?: string; price: number; stock: number; color?: string; type?: string; }
+interface Product { id: string; sku: string; name?: string; price: number; stock: number; color?: string; type?: string; }
 interface Item {
   productId: string;
   sku: string;
-  description: string;
+  name: string; // nome visual no frontend
+  description: string; // descrição para o banco de dados
   color: string;
   defaultPrice: number;
   appliedPrice: string;
@@ -64,7 +65,7 @@ function NovoOrcamentoForm() {
       setProdResults(products.filter((p) =>
         p.sku.toLowerCase().includes(q) || 
         (p.name ?? "").toLowerCase().includes(q) || 
-        (p.description ?? "").toLowerCase().includes(q) ||
+        (p.name ?? "").toLowerCase().includes(q) ||
         (p.type ?? "").toLowerCase().includes(q) ||
         (p.color ?? "").toLowerCase().includes(q)
       ).slice(0, 50));
@@ -75,7 +76,8 @@ function NovoOrcamentoForm() {
     setItems([...items, { 
       productId: p.id, 
       sku: p.sku, 
-      description: p.description || p.name || p.sku, 
+      name: p.name || p.sku, 
+      description: p.name || p.sku, 
       color: p.color || "",
       defaultPrice: p.price, 
       appliedPrice: p.price.toString(), 
@@ -110,7 +112,7 @@ function NovoOrcamentoForm() {
           items: items.map((it) => ({
             productId: it.productId,
             sku: it.sku,
-            description: it.description,
+            description: it.description, // Mapeia corretamente para o banco
             color: it.color,
             defaultPrice: it.defaultPrice,
             appliedPrice: parseFloat(it.appliedPrice) || 0,
@@ -172,7 +174,7 @@ function NovoOrcamentoForm() {
               <div key={idx} className={styles.tableRow}>
                 <div className={styles.prodInfo}>
                   <span className={styles.sku}>{item.sku}</span>
-                  <span className={styles.name}>{item.description}</span>
+                  <span className={styles.name}>{item.name}</span>
                 </div>
                 <div className={styles.colorVal}>{item.color || "—"}</div>
                 <div className={styles.right}>{formatCurrency(item.defaultPrice)}</div>
@@ -229,7 +231,7 @@ function NovoOrcamentoForm() {
                     <div className={styles.prodOptionMain}>
                       <span className={styles.prodOptionSku}>{p.sku}</span>
                       <span className={styles.prodOptionName}>
-                        {p.description || p.name || p.sku} 
+                        {p.name || p.sku} 
                         {p.color ? ` — ${p.color}` : ""}
                       </span>
                     </div>

@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 
 interface Product {
   id: string; sku: string; name?: string; type?: string; color?: string;
-  leather?: string; brand?: string; description?: string; price: number;
+  leather?: string; brand?: string; price: number;
   suggestedPrice?: number; purchaseCost?: number; packagingCost?: number;
   shippingCost?: number; otherCosts?: number; totalCost?: number;
   stock: number; active: boolean; obs?: string; category?: string;
@@ -139,9 +139,6 @@ export default function ProdutoDetailPage() {
               {editing ? <input className="input-field" value={form.category || ""} onChange={(e) => set("category", e.target.value)} />
                 : <div className={detailStyles.value}>{product.category || "—"}</div>}</div>
           </div>
-          <div><label className="label">Descrição</label>
-            {editing ? <input className="input-field" value={form.description || ""} onChange={(e) => set("description", e.target.value)} />
-              : <div className={detailStyles.value}>{product.description || "—"}</div>}</div>
         </div>
 
         {/* Custos e Precificação */}
