@@ -1,0 +1,219 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  font-family: var(--font-inter), sans-serif;
+  color: #111;
+  background: #fcfcfc;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  max-height: 40px;
+}
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.8rem;
+  background: #000;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.intro h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.intro p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.budgetCard {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  margin-bottom: 2rem;
+}
+
+.budgetHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #999;
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itName {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.itSub {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.itPrice {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.totalRow {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.validationPanel {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.validationPanel h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.validationPanel p {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  color: #444;
+}
+
+.input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: inherit;
+}
+
+.btnValidate {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btnValidate:active {
+  transform: scale(0.98);
+}
+
+.btnValidate:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.lgpdNotice {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 1rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.successCard {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+  background: #16a34a;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1.5rem;
+}
+
+.successCard h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.successCard p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 0.75rem;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.loading {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,154 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.greeting {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.badge {
+  background: var(--foreground);
+  color: var(--surface);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Quick Actions */
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .quickGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.quickCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--foreground);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.quickCard:hover {
+  background: var(--foreground);
+  color: var(--surface);
+  border-color: var(--foreground);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.quickIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.quickLabel {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Module Grid */
+.moduleGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .moduleGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .moduleGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.moduleCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--foreground);
+  transition: all 0.15s ease;
+}
+
+.moduleCard:hover {
+  border-color: var(--foreground);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.moduleIcon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.moduleName {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.moduleDesc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}

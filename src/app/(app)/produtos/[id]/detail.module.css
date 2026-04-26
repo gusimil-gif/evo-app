@@ -1,0 +1,82 @@
+.loading {
+  padding: 3rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 0.95rem;
+  color: var(--foreground);
+  padding: 0.5rem 0;
+}
+
+.valueHighlight {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+}
+
+.danger { color: var(--danger); }
+
+.btnMovement {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  align-self: flex-start;
+}
+.btnMovement:hover { border-color: var(--foreground); }
+
+.movementForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  background: var(--muted-background);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* Histórico */
+.movements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.movRow {
+  display: grid;
+  grid-template-columns: 80px 60px 1fr 100px 80px;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.82rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.movRow:last-child { border-bottom: none; }
+
+.movType {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 99px;
+  text-align: center;
+}
+
+.movENTRY { background: #dcfce7; color: #16a34a; }
+.movEXIT { background: #fef2f2; color: #dc2626; }
+.movADJUSTMENT { background: #fef9c3; color: #92400e; }
+.movLOSS { background: #f3f4f6; color: #4b5563; }
+
+.movQty { font-weight: 600; font-size: 0.9rem; }
+.movReason { color: var(--muted); }
+.movUser { color: var(--muted); font-size: 0.78rem; }
+.movDate { color: var(--muted); font-size: 0.78rem; text-align: right; }

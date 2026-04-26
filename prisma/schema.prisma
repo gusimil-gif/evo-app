@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("COMMON") // MASTER, ADMIN, COMMON
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  movements InventoryMovement[]
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  sku           String   @unique
+  type          String?
+  color         String?
+  leather       String?
+  brand         String?
+  description   String?
+  name          String?
+  active        Boolean  @default(true)
+  category      String?
+  obs           String?
+  imageUrl      String?
+
+  // Preços de venda
+  price         Float    @default(0.0) // Preço padrão de venda
+  suggestedPrice Float?                // Preço sugerido
+
+  // Estrutura de custos
+  purchaseCost  Float?  // Custo de compra
+  packagingCost Float?  // Custo embalagem
+  shippingCost  Float?  // Frete fornecedor
+  otherCosts    Float?  // Outros custos
+  totalCost     Float?  // Custo total (soma)
+
+  stock         Int      @default(0)
+  lastPurchase  DateTime?
+  costPrice     Float?   // Campo legado — substituído por purchaseCost
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  movements     InventoryMovement[]
+  budgetItems   BudgetItem[]
+}
+
+model InventoryMovement {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  type      String   // ENTRY, EXIT, ADJUSTMENT, LOSS
+  quantity  Int
+  date      DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  reason    String?
+  obs       String?
+}
+
+model Partner {
+  id        String   @id @default(cuid())
+  name      String
+  type      String   @default("FORNECEDOR") // FORNECEDOR, OFICINA, LOGISTICA, etc.
+  phone     String?
+  email     String?
+  document  String?
+  address   String?
+  obs       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  document  String?  // CPF/CNPJ
+  phone     String?
+  email     String?
+  address   String?
+  obs       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  budgets   Budget[]
+}
+
+model Budget {
+  id              String   @id @default(cuid())
+  customerId      String
+  customer        Customer @relation(fields: [customerId], references: [id])
+  date            DateTime @default(now())
+  status          String   @default("DRAFT") // DRAFT, APPROVED, CONVERTED, CANCELLED
+  paymentCond     String?  // Condições de pagamento
+  obs             String?
+  
+  items           BudgetItem[]
+  signatureName  String?
+  signatureDate  DateTime?
+  signatureData  String?  // Base64 signature image
+  validationIp   String?  // Auditoria LGPD
+  validationAgent String? // Auditoria LGPD
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+
+
+model BudgetItem {
+  id            String   @id @default(cuid())
+  budgetId      String
+  productId     String
+  sku           String
+  description   String?
+  color         String?
+  defaultPrice  Float
+  appliedPrice  Float
+  quantity      Int
+  total         Float
+
+  budget        Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  product       Product  @relation(fields: [productId], references: [id])
+}
+
+

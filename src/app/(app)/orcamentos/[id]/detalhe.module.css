@@ -1,0 +1,116 @@
+.page { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.topBar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+.back { font-size: 0.85rem; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--foreground); }
+.topActions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+.btnPDF { padding: 0.55rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--foreground); font-size: 0.85rem; font-weight: 500; cursor: pointer; font-family: inherit; }
+.btnApprove { padding: 0.55rem 1rem; border: none; border-radius: var(--radius); background: #dcfce7; color: #15803d; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.btnConvert { padding: 0.55rem 1rem; border: none; border-radius: var(--radius); background: var(--foreground); color: var(--surface); font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none; display: inline-flex; align-items: center; }
+
+.headerInfo { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.title { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; }
+.date { font-size: 0.85rem; color: var(--muted); margin-top: 2px; text-transform: capitalize; }
+.status { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+.statusDRAFT { background: #f5f5f5; color: #737373; }
+.statusAPPROVED { background: #dcfce7; color: #16a34a; }
+.statusSIGNED { background: #f0fdf4; color: #16a34a; }
+
+/* Assinatura */
+.signaturePanel {
+  background: var(--surface);
+  border: 2px solid var(--foreground);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+.signatureTitle { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+.signatureDesc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; }
+.canvasLabel { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; color: var(--muted); }
+.canvas {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  height: 150px;
+  touch-action: none;
+  cursor: crosshair;
+}
+.signatureActions { display: flex; gap: 0.75rem; margin-top: 1rem; }
+.btnClear { padding: 0.55rem 1rem; border: 1px solid var(--border); background: #fff; border-radius: var(--radius); cursor: pointer; }
+.btnCancel { padding: 0.55rem 1rem; border: none; background: #fee2e2; color: #b91c1c; border-radius: var(--radius); cursor: pointer; }
+.btnConfirmSign { padding: 0.55rem 1rem; border: none; background: var(--foreground); color: var(--surface); border-radius: var(--radius); cursor: pointer; font-weight: 600; flex: 1; }
+.btnValidateExternal { padding: 0.55rem 1rem; border: none; border-radius: var(--radius); background: #eff6ff; color: #1d4ed8; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.btnDanger { padding: 0.55rem 1rem; border: 1px solid #fee2e2; border-radius: var(--radius); background: #fff; color: #b91c1c; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.btnDanger:hover { background: #fef2f2; }
+
+.modalOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+.deleteModal { background: #fff; padding: 2rem; border-radius: 12px; max-width: 400px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+.deleteModal h3 { color: #b91c1c; margin-bottom: 0.5rem; }
+.deleteModal p { font-size: 0.9rem; color: #666; line-height: 1.5; }
+.deleteActions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+.btnConfirmDelete { padding: 0.55rem 1rem; border: none; background: #b91c1c; color: #fff; border-radius: var(--radius); cursor: pointer; font-weight: 600; }
+
+
+.signedCard {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+.signedIcon {
+  width: 2.5rem; height: 2.5rem; background: #16a34a; color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; font-weight: 700;
+}
+.signedName { font-weight: 700; font-size: 1rem; color: #166534; }
+.signedDate { font-size: 0.8rem; color: #166534; opacity: 0.8; }
+.signatureImg { max-height: 50px; background: #fff; padding: 4px; border-radius: 4px; border: 1px solid #bbf7d0; margin-left: auto; }
+
+
+.grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.cardLabel { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.clienteName { font-size: 1rem; font-weight: 600; }
+.clienteInfo { font-size: 0.85rem; color: var(--muted); }
+.clienteLink { font-size: 0.8rem; color: var(--muted); text-decoration: none; margin-top: 0.5rem; }
+.paymentText { font-size: 0.9rem; font-weight: 500; }
+.obsText { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+
+.itemsCard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.itemsTable { display: flex; flex-direction: column; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.tableHead {
+  display: grid; grid-template-columns: 1fr 100px 120px 80px 140px;
+  padding: 0.75rem 1.25rem; background: var(--muted-background);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  min-width: 600px;
+}
+.tableRow {
+  display: grid; grid-template-columns: 1fr 100px 120px 80px 140px;
+  padding: 1rem 1.25rem; border-top: 1px solid var(--border);
+  font-size: 0.875rem; align-items: center; min-width: 600px;
+}
+.prodInfo { display: flex; flex-direction: column; gap: 0.2rem; }
+.sku { font-family: monospace; font-size: 0.75rem; color: var(--muted); }
+.name { font-size: 0.9rem; font-weight: 600; }
+.colorVal { font-size: 0.85rem; color: var(--muted); }
+.right { text-align: right; }
+
+.totalBanner {
+  background: var(--foreground); color: var(--surface);
+  padding: 1rem 1.5rem; display: flex; justify-content: space-between;
+  align-items: center; border-radius: var(--radius);
+  font-size: 1.15rem; font-weight: 700;
+}
+.discountRow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 1.5rem; background: #f0fdf4; border: 1px solid #bbf7d0;
+  border-radius: var(--radius); font-size: 0.9rem; color: #16a34a; font-weight: 600;
+}

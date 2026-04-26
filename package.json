@@ -9,16 +9,28 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.3",
+    "@prisma/adapter-libsql": "^7.8.0",
+    "@prisma/client": "^6.4.1",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "fast-xml-parser": "^5.7.2",
+    "html2canvas": "^1.4.1",
+    "jose": "^6.2.2",
+    "jspdf": "^4.2.1",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "prisma": "^6.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
