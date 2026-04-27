@@ -1,7 +1,14 @@
 .shell {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background: var(--background);
+}
+
+@media (min-width: 768px) {
+  .shell {
+    flex-direction: row;
+  }
 }
 
 /* ===================== SIDEBAR ===================== */
@@ -147,6 +154,37 @@
   background: var(--danger);
   color: white;
   border-color: var(--danger);
+}
+
+/* ===================== MOBILE HEADER ===================== */
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 101;
+}
+
+@media (min-width: 768px) {
+  .mobileHeader {
+    display: none;
+  }
+}
+
+.mobileLogoutBtn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
 }
 
 /* ===================== MAIN ===================== */

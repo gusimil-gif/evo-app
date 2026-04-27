@@ -31,6 +31,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={styles.shell}>
+      {/* HEADER (Mobile Only) */}
+      <header className={styles.mobileHeader}>
+        <Image 
+          src="/logo-evo.png" 
+          alt="EVO" 
+          width={80}
+          height={24}
+          style={{ objectFit: 'contain' }}
+          priority
+        />
+        <button className={styles.mobileLogoutBtn} onClick={logout}>Sair</button>
+      </header>
+
       {/* SIDEBAR (Desktop) */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
