@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -40,10 +41,13 @@ export default function LoginPage() {
     <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
       <div className="premium-card" style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <img 
+          <Image 
             src="/logo-dark.png" 
             alt="EVO" 
-            style={{ maxWidth: '180px', height: 'auto', marginBottom: '1rem', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} 
+            width={180}
+            height={60}
+            style={{ objectFit: 'contain', marginBottom: '1rem', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
+            priority
           />
           <p className="subtitle">GESTÃO DE ESTOQUE</p>
         </div>

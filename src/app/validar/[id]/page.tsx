@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import styles from "./validar.module.css";
 
 const formatCurrency = (val: number) => {
@@ -62,13 +63,14 @@ export default function ValidarPublicPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <img 
+        <Image 
           src="/logo-dark.png" 
           alt="EVO" 
           className={styles.logo} 
           width={120} 
           height={34} 
           style={{ objectFit: 'contain' }}
+          priority
         />
         <div className={styles.badge}>VALIDE SEU PEDIDO</div>
       </header>

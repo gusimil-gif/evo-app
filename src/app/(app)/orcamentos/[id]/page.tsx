@@ -140,190 +140,202 @@ export default function OrcamentoDetalhePage() {
     }
   };
 
-  const gerarPDF = async () => {
-    const { default: jsPDF } = await import("jspdf");
-    if (!orc) return;
-
-    const doc = new jsPDF({ unit: "mm", format: "a4" });
-    const W = 210; const margin = 20;
-
-    // Header
-    doc.setFillColor(17, 17, 17);
-    doc.rect(0, 0, W, 35, "F");
-    
-    // Logo
-    try {
-      // Usando a logo oficial salva em /public/logo-evo.jpg
-      // Em jspdf client-side, podemos carregar via URL ou base64
-      doc.addImage("/logo-white.png", "PNG", margin, 5, 25, 25);
-    } catch (e) {
-      // Fallback se a imagem não carregar
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(22);
-      doc.setFont("helvetica", "bold");
-      doc.text("EVO", margin, 20);
-    }
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text(`ORÇAMENTO #${orc.id.slice(-6).toUpperCase()}`, W - margin, 15, { align: "right" });
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
-    doc.text(new Date(orc.date).toLocaleDateString("pt-BR"), W - margin, 22, { align: "right" });
-
-    let y = 50;
-
-    // Cliente
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(100, 100, 100);
-    doc.text("CLIENTE", margin, y);
-    y += 6;
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(17, 17, 17);
-    doc.setFontSize(12);
-    doc.text(orc.customer.name, margin, y);
-    y += 6;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(80, 80, 80);
-    if (orc.customer.phone) { doc.text(`Tel: ${orc.customer.phone}`, margin, y); y += 5; }
-    if (orc.customer.email) { doc.text(`E-mail: ${orc.customer.email}`, margin, y); y += 5; }
-    if (orc.customer.address) { doc.text(`End: ${orc.customer.address}`, margin, y); y += 5; }
-
-    y += 12;
-
-    // Tabela de Itens - Ajuste de colunas para evitar encavalar
-    const colSKU = 15;
-    const colDesc = 40;
-    const colCor = 100;
-    const colQtd = 125;
-    const colUnit = 145;
-    const colTotal = 195;
-
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("SKU", colSKU, y);
-    doc.text("Descrição", colDesc, y);
-    doc.text("Cor", colCor, y);
-    doc.text("Qtd", colQtd, y);
-    doc.text("V. Unit", colUnit, y);
-    doc.text("Total", colTotal, y, { align: "right" });
-    
-    doc.setDrawColor(200, 200, 200);
-    doc.line(20, y+2, 190, y+2);
-    y += 10;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    
-    orc.items.forEach((it: any) => {
-      // Quebra de linha para descrição se for longa
-      const desc = it.description || it.sku;
-      const descLines = doc.splitTextToSize(desc, 55); // Limita a 55mm de largura
-      
-      doc.text(it.sku, colSKU, y);
-      doc.text(descLines, colDesc, y);
-      doc.text(it.color || "—", colCor, y);
-      doc.text(it.quantity.toString(), colQtd, y);
-      doc.text(formatCurrency(it.appliedPrice), colUnit, y);
-      doc.text(formatCurrency(it.total), colTotal, y, { align: "right" });
-      
-      const lineOffset = Math.max(descLines.length * 5, 8);
-      y += lineOffset;
-      
-      // Nova página se necessário
-      if (y > 270) { doc.addPage(); y = 20; }
-    });
-
-    doc.line(20, y, 190, y);
-    y += 10;
-
-    // Resumo Final - Alinhado à direita de forma legível
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("TOTAL DO ORÇAMENTO:", colUnit - 15, y, { align: "right" });
-    doc.text(formatCurrency(total), colTotal, y, { align: "right" });
-    
-    y += 15;
-    if (orc.paymentCond) {
-      doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
-      doc.text("Condições de Pagamento:", margin, y); y += 6;
-      doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
-      doc.text(orc.paymentCond, margin, y); y += 12;
-    }
-
-    if (orc.deliveryTime) {
-      doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
-      doc.text("Prazo de Entrega:", W - margin - 40, y - 18, { align: "right" });
-      doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
-      doc.text(orc.deliveryTime, W - margin, y - 18, { align: "right" });
-    }
-
-    if (orc.obs) {
-      doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
-      const lines = doc.splitTextToSize("Observações: " + orc.obs, W - margin * 2);
-      doc.text(lines, margin, y);
-      y += lines.length * 5 + 5;
-    }
-
-    // Assinatura no PDF
-    if (orc.signatureData) {
-      doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
-      doc.text("ASSINATURA DO CLIENTE", margin, y); y += 6;
-      doc.addImage(orc.signatureData, "PNG", margin, y, 60, 20);
-      y += 22;
-      doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
-      doc.text(orc.signatureName ?? "", margin, y); y += 5;
-      doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
-      doc.text(`Assinado eletronicamente em: ${new Date(orc.signatureDate!).toLocaleString("pt-BR")}`, margin, y);
-    }
-
-    // Footer
-    const footY = 285;
-    doc.setFillColor(245, 245, 245);
-    doc.rect(0, footY, W, 12, "F");
-    doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(120, 120, 120);
-    doc.text("EVO — Artigos em Couro Premium", W / 2, footY + 5, { align: "center" });
-    doc.text(`Orçamento válido por 7 dias | Gerado em ${new Date().toLocaleDateString("pt-BR")}`, W / 2, footY + 9, { align: "center" });
-
-    // Gerar o blob do PDF para compartilhamento
-    const pdfBlob = doc.output('blob');
-    const pdfFile = new File([pdfBlob], `EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`, { type: 'application/pdf' });
-
-    // Se estiver no mobile e suportar compartilhamento de arquivos
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-      try {
-        await navigator.share({
-          files: [pdfFile],
-          title: `Orçamento EVO - ${orc.customer.name}`,
-          text: `Olá, segue o orçamento da EVO.`
-        });
-      } catch (err) {
-        // Se o usuário cancelar ou der erro, tenta o download normal
-        doc.save(`EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`);
-      }
-    } else {
-      // Desktop ou navegador sem suporte a share: Download normal
-      doc.save(`EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`);
-    }
-  };
-    
-
-
   if (loading) return <div style={{ padding: "2rem", color: "var(--muted)" }}>Carregando...</div>;
   if (!orc) return <div style={{ padding: "2rem", color: "var(--muted)" }}>Orçamento não encontrado.</div>;
 
   const total = orc.items.reduce((s, it) => s + it.total, 0);
   const totalDesconto = orc.items.reduce((s, it) => s + (it.defaultPrice - it.appliedPrice) * it.quantity, 0);
 
+  const gerarPDF = async () => {
+    if (!orc) return;
+    setConverting(true);
+    
+    try {
+      const { default: jsPDF } = await import("jspdf");
+      const doc = new jsPDF({ unit: "mm", format: "a4" });
+      const W = 210; const margin = 20;
+
+      // Header
+      doc.setFillColor(17, 17, 17);
+      doc.rect(0, 0, W, 35, "F");
+      
+      // Logo
+      try {
+        const logoResp = await fetch("/logo-white.png");
+        const logoBlob = await logoResp.blob();
+        const logoBase64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(logoBlob);
+        }) as string;
+        doc.addImage(logoBase64, "PNG", margin, 5, 25, 25);
+      } catch (e) {
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.text("EVO", margin, 20);
+      }
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text(`ORÇAMENTO #${orc.id.slice(-6).toUpperCase()}`, W - margin, 15, { align: "right" });
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.text(new Date(orc.date).toLocaleDateString("pt-BR"), W - margin, 22, { align: "right" });
+
+      let y = 50;
+
+      // Cliente
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(100, 100, 100);
+      doc.text("CLIENTE", margin, y);
+      y += 6;
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(17, 17, 17);
+      doc.setFontSize(12);
+      doc.text(orc.customer.name, margin, y);
+      y += 6;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 80);
+      if (orc.customer.phone) { doc.text(`Tel: ${orc.customer.phone}`, margin, y); y += 5; }
+      if (orc.customer.email) { doc.text(`E-mail: ${orc.customer.email}`, margin, y); y += 5; }
+      if (orc.customer.address) { doc.text(`End: ${orc.customer.address}`, margin, y); y += 5; }
+
+      y += 12;
+
+      // Tabela de Itens
+      const colSKU = 15;
+      const colDesc = 40;
+      const colCor = 100;
+      const colQtd = 125;
+      const colUnit = 145;
+      const colTotal = 195;
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("SKU", colSKU, y);
+      doc.text("Descrição", colDesc, y);
+      doc.text("Cor", colCor, y);
+      doc.text("Qtd", colQtd, y);
+      doc.text("V. Unit", colUnit, y);
+      doc.text("Total", colTotal, y, { align: "right" });
+      
+      doc.setDrawColor(200, 200, 200);
+      doc.line(20, y+2, 190, y+2);
+      y += 10;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      
+      orc.items.forEach((it: any) => {
+        const desc = it.description || it.sku;
+        const descLines = doc.splitTextToSize(desc, 55);
+        
+        doc.text(it.sku, colSKU, y);
+        doc.text(descLines, colDesc, y);
+        doc.text(it.color || "—", colCor, y);
+        doc.text(it.quantity.toString(), colQtd, y);
+        doc.text(formatCurrency(it.appliedPrice), colUnit, y);
+        doc.text(formatCurrency(it.total), colTotal, y, { align: "right" });
+        
+        const lineOffset = Math.max(descLines.length * 5, 8);
+        y += lineOffset;
+        if (y > 270) { doc.addPage(); y = 20; }
+      });
+
+      doc.line(20, y, 190, y);
+      y += 10;
+
+      // Resumo Final
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("TOTAL DO ORÇAMENTO:", colUnit - 15, y, { align: "right" });
+      doc.text(formatCurrency(total), colTotal, y, { align: "right" });
+      
+      y += 15;
+      if (orc.paymentCond) {
+        doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
+        doc.text("Condições de Pagamento:", margin, y); y += 6;
+        doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
+        doc.text(orc.paymentCond, margin, y); y += 12;
+      }
+
+      if (orc.deliveryTime) {
+        doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
+        doc.text("Prazo de Entrega:", W - margin - 40, y - 18, { align: "right" });
+        doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
+        doc.text(orc.deliveryTime, W - margin, y - 18, { align: "right" });
+      }
+
+      if (orc.obs) {
+        doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+        const lines = doc.splitTextToSize("Observações: " + orc.obs, W - margin * 2);
+        doc.text(lines, margin, y);
+        y += lines.length * 5 + 5;
+      }
+
+      // Assinatura
+      if (orc.signatureData) {
+        doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
+        doc.text("ASSINATURA DO CLIENTE", margin, y); y += 6;
+        doc.addImage(orc.signatureData, "PNG", margin, y, 60, 20);
+        y += 22;
+        doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
+        doc.text(orc.signatureName ?? "", margin, y); y += 5;
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+        doc.text(`Assinado eletronicamente em: ${new Date(orc.signatureDate!).toLocaleString("pt-BR")}`, margin, y);
+      }
+
+      // Footer
+      const footY = 285;
+      doc.setFillColor(245, 245, 245);
+      doc.rect(0, footY, W, 12, "F");
+      doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(120, 120, 120);
+      doc.text("EVO — Artigos em Couro Premium", W / 2, footY + 5, { align: "center" });
+      doc.text(`Orçamento válido por 7 dias | Gerado em ${new Date().toLocaleDateString("pt-BR")}`, W / 2, footY + 9, { align: "center" });
+
+      const pdfBlob = doc.output('blob');
+      const filename = `EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`;
+      const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            files: [pdfFile],
+            title: `Orçamento EVO - ${orc.customer.name}`,
+            text: `Olá, segue o orçamento da EVO.`
+          });
+        } catch (err: any) {
+          // Se falhar (ex: usuário cancelou ou browser recusou), tenta download normal
+          if (err.name !== 'AbortError') {
+            doc.save(filename);
+          }
+        }
+      } else {
+        doc.save(filename);
+      }
+    } catch (error) {
+      console.error("Erro PDF:", error);
+      alert("Houve um erro ao gerar o PDF. Tente novamente.");
+    } finally {
+      setConverting(false);
+    }
+  };
+    
+
+
+
   return (
     <div className={styles.page}>
       <div className={styles.topBar}>
         <Link href="/orcamentos" className={styles.back}>← Orçamentos</Link>
         <div className={styles.topActions}>
-          <button className={styles.btnPDF} onClick={gerarPDF}>⬇ Baixar PDF</button>
+          <button className={styles.btnPDF} onClick={gerarPDF} disabled={converting}>
+            {converting ? "⏳ Gerando..." : "⬇ Baixar PDF"}
+          </button>
           {orc.status === "DRAFT" && (
             <button className={styles.btnApprove} onClick={() => updateStatus("APPROVED")} disabled={updatingStatus}>
               {updatingStatus ? "..." : "✓ Aprovar"}
