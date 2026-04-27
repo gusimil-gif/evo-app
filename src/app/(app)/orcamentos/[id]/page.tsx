@@ -289,16 +289,27 @@ export default function OrcamentoDetalhePage() {
       }
 
       // Assinatura
-      if (orc.signatureData) {
+      if (orc.signatureData && orc.signatureData.startsWith("data:image")) {
         doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
         doc.text("ASSINATURA DO CLIENTE", margin, y); y += 6;
-        doc.addImage(orc.signatureData, "PNG", margin, y, 60, 20);
+        try {
+          doc.addImage(orc.signatureData, "PNG", margin, y, 60, 20);
+        } catch (e) { console.error("Erro ao inserir assinatura", e); }
         y += 22;
         doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
         doc.text(orc.signatureName ?? "", margin, y); y += 5;
         doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
         const sigDate = orc.signatureDate ? new Date(orc.signatureDate).toLocaleString("pt-BR") : "—";
         doc.text(`Assinado eletronicamente em: ${sigDate}`, margin, y);
+      } else if (orc.signatureName) {
+        // Se tiver nome mas não tiver imagem (validação externa)
+        doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
+        doc.text("VALIDAÇÃO DO CLIENTE", margin, y); y += 6;
+        doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
+        doc.text(orc.signatureName, margin, y); y += 5;
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+        const sigDate = orc.signatureDate ? new Date(orc.signatureDate).toLocaleString("pt-BR") : "—";
+        doc.text(`Validado digitalmente em: ${sigDate}`, margin, y);
       }
 
       // Footer
@@ -328,9 +339,9 @@ export default function OrcamentoDetalhePage() {
       } else {
         doc.save(filename);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro PDF:", error);
-      alert("Houve um erro ao gerar o PDF. Tente novamente.");
+      alert("Erro ao gerar PDF: " + (error.message || "Erro desconhecido"));
       setConverting(false);
     }
   };
