@@ -163,9 +163,13 @@ export default function OrcamentoDetalhePage() {
       try {
         const logoResp = await fetch("/logo-white.png");
         const logoBlob = await logoResp.blob();
-        const logoBase64 = await new Promise((resolve) => {
+        const logoBase64 = await new Promise((resolve, reject) => {
           const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
+          reader.onloadend = () => {
+            if (typeof reader.result === "string") resolve(reader.result);
+            else reject(new Error("Erro ao carregar logo"));
+          };
+          reader.onerror = reject;
           reader.readAsDataURL(logoBlob);
         }) as string;
         doc.addImage(logoBase64, "PNG", margin, 5, 25, 25);
