@@ -37,6 +37,22 @@ export default function OrcamentoDetalhePage() {
   const [loading, setLoading] = useState(true);
   const [converting, setConverting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [jsPDFLib, setJsPDFLib] = useState<any>(null);
+  const [logoBase64, setLogoBase64] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Pré-carrega o jsPDF e a Logo para evitar atrasos no Android
+    import("jspdf").then(m => setJsPDFLib(m.default));
+    fetch("/logo-white.png")
+      .then(r => r.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (typeof reader.result === "string") setLogoBase64(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      }).catch(() => {});
+  }, []);
 
   const load = () => {
     fetch(`/api/orcamentos/${id}`).then((r) => r.json())
@@ -147,12 +163,14 @@ export default function OrcamentoDetalhePage() {
   const totalDesconto = orc.items.reduce((s, it) => s + (it.defaultPrice - it.appliedPrice) * it.quantity, 0);
 
   const gerarPDF = async () => {
-    if (!orc) return;
+    if (!orc || !jsPDFLib) {
+      if (!jsPDFLib) alert("Aguarde o carregamento do gerador de PDF...");
+      return;
+    }
     setConverting(true);
     
     try {
-      const { default: jsPDF } = await import("jspdf");
-      const doc = new jsPDF({ unit: "mm", format: "a4" });
+      const doc = new jsPDFLib({ unit: "mm", format: "a4" });
       const W = 210; const margin = 20;
 
       // Header
@@ -160,20 +178,9 @@ export default function OrcamentoDetalhePage() {
       doc.rect(0, 0, W, 35, "F");
       
       // Logo
-      try {
-        const logoResp = await fetch("/logo-white.png");
-        const logoBlob = await logoResp.blob();
-        const logoBase64 = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            if (typeof reader.result === "string") resolve(reader.result);
-            else reject(new Error("Erro ao carregar logo"));
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(logoBlob);
-        }) as string;
+      if (logoBase64) {
         doc.addImage(logoBase64, "PNG", margin, 5, 25, 25);
-      } catch (e) {
+      } else {
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(22);
         doc.setFont("helvetica", "bold");
@@ -290,7 +297,8 @@ export default function OrcamentoDetalhePage() {
         doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
         doc.text(orc.signatureName ?? "", margin, y); y += 5;
         doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
-        doc.text(`Assinado eletronicamente em: ${new Date(orc.signatureDate!).toLocaleString("pt-BR")}`, margin, y);
+        const sigDate = orc.signatureDate ? new Date(orc.signatureDate).toLocaleString("pt-BR") : "—";
+        doc.text(`Assinado eletronicamente em: ${sigDate}`, margin, y);
       }
 
       // Footer
@@ -305,7 +313,9 @@ export default function OrcamentoDetalhePage() {
       const filename = `EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`;
       const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
 
-      if (navigator.share) {
+      setConverting(false);
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
         try {
           await navigator.share({
             files: [pdfFile],
@@ -313,10 +323,7 @@ export default function OrcamentoDetalhePage() {
             text: `Olá, segue o orçamento da EVO.`
           });
         } catch (err: any) {
-          // Se falhar (ex: usuário cancelou ou browser recusou), tenta download normal
-          if (err.name !== 'AbortError') {
-            doc.save(filename);
-          }
+          if (err.name !== 'AbortError') doc.save(filename);
         }
       } else {
         doc.save(filename);
@@ -324,7 +331,6 @@ export default function OrcamentoDetalhePage() {
     } catch (error) {
       console.error("Erro PDF:", error);
       alert("Houve um erro ao gerar o PDF. Tente novamente.");
-    } finally {
       setConverting(false);
     }
   };
