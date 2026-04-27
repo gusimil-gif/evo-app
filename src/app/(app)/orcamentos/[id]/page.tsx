@@ -42,7 +42,7 @@ export default function OrcamentoDetalhePage() {
 
   useEffect(() => {
     // Pré-carrega a Logo para evitar atrasos no Android
-    fetch("/logo-white.png")
+    fetch("/logo-evo-white.png")
       .then(r => r.blob())
       .then(blob => {
         const reader = new FileReader();

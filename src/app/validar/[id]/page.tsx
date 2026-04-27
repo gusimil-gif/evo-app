@@ -64,11 +64,11 @@ export default function ValidarPublicPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <Image 
-          src="/logo-evo.png" 
+          src="/logo-evo-dark.png" 
           alt="EVO" 
           className={styles.logo} 
-          width={120} 
-          height={34} 
+          width={100} 
+          height={100} 
           style={{ objectFit: 'contain' }}
           priority
         />

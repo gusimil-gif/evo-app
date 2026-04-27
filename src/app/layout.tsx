@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: "EVO | Gestão de Estoque e Orçamentos",
   description: "Sistema premium de gestão de estoque, orçamentos e pedidos para a marca EVO.",
   icons: {
-    icon: "/logo-evo.png?v=2",
-    apple: "/logo-evo.png?v=2",
+    icon: "/logo-evo-dark.png?v=3",
+    apple: "/logo-evo-dark.png?v=3",
   }
 };
 

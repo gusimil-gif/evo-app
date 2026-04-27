@@ -34,10 +34,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* HEADER (Mobile Only) */}
       <header className={styles.mobileHeader}>
         <Image 
-          src="/logo-evo.png" 
+          src="/logo-evo-dark.png" 
           alt="EVO" 
-          width={80}
-          height={24}
+          width={50}
+          height={50}
           style={{ objectFit: 'contain' }}
           priority
         />
@@ -48,11 +48,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <Image 
-            src="/logo-evo.png" 
+            src="/logo-evo-dark.png" 
             alt="EVO" 
             className={styles.logoImg} 
-            width={140}
-            height={40}
+            width={100}
+            height={100}
             style={{ objectFit: 'contain' }}
             priority
           />
