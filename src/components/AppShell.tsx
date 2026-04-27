@@ -35,7 +35,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <Image 
-            src="/logo-dark.png" 
+            src="/logo-evo.png" 
             alt="EVO" 
             className={styles.logoImg} 
             width={140}

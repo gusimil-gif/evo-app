@@ -64,7 +64,7 @@ export default function ValidarPublicPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <Image 
-          src="/logo-dark.png" 
+          src="/logo-evo.png" 
           alt="EVO" 
           className={styles.logo} 
           width={120} 

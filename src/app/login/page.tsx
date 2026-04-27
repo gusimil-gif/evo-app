@@ -42,7 +42,7 @@ export default function LoginPage() {
       <div className="premium-card" style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <Image 
-            src="/logo-dark.png" 
+            src="/logo-evo.png" 
             alt="EVO" 
             width={180}
             height={60}

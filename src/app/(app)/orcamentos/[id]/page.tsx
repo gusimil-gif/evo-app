@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { jsPDF } from "jspdf";
 import styles from "./detalhe.module.css";
 
 interface OrcamentoItem {
@@ -37,12 +38,10 @@ export default function OrcamentoDetalhePage() {
   const [loading, setLoading] = useState(true);
   const [converting, setConverting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [jsPDFLib, setJsPDFLib] = useState<any>(null);
   const [logoBase64, setLogoBase64] = useState<string | null>(null);
 
   useEffect(() => {
-    // Pré-carrega o jsPDF e a Logo para evitar atrasos no Android
-    import("jspdf").then(m => setJsPDFLib(m.default));
+    // Pré-carrega a Logo para evitar atrasos no Android
     fetch("/logo-white.png")
       .then(r => r.blob())
       .then(blob => {
@@ -163,14 +162,11 @@ export default function OrcamentoDetalhePage() {
   const totalDesconto = orc.items.reduce((s, it) => s + (it.defaultPrice - it.appliedPrice) * it.quantity, 0);
 
   const gerarPDF = async () => {
-    if (!orc || !jsPDFLib) {
-      if (!jsPDFLib) alert("Aguarde o carregamento do gerador de PDF...");
-      return;
-    }
+    if (!orc) return;
     setConverting(true);
     
     try {
-      const doc = new jsPDFLib({ unit: "mm", format: "a4" });
+      const doc = new jsPDF({ unit: "mm", format: "a4" });
       const W = 210; const margin = 20;
 
       // Header
