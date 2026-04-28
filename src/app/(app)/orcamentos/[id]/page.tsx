@@ -263,18 +263,28 @@ export default function OrcamentoDetalhePage() {
       doc.text(formatCurrency(total), colTotal, y, { align: "right" });
       
       y += 15;
-      if (orc.paymentCond) {
-        doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
-        doc.text("Condições de Pagamento:", margin, y); y += 6;
-        doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
-        doc.text(orc.paymentCond, margin, y); y += 12;
-      }
+      const initialY = y;
 
+      // Chave PIX (Esquerda)
+      doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
+      doc.text("Chave PIX (E-mail):", margin, y); y += 5;
+      doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
+      doc.text("contato@useevo.store", margin, y); y += 10;
+
+      // Prazo de Entrega (Direita) no mesmo nível
       if (orc.deliveryTime) {
         doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
-        doc.text("Prazo de Entrega:", W - margin - 40, y - 18, { align: "right" });
+        doc.text("Prazo de Entrega:", W - margin - 35, initialY, { align: "right" });
         doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
-        doc.text(orc.deliveryTime, W - margin, y - 18, { align: "right" });
+        doc.text(orc.deliveryTime, W - margin, initialY, { align: "right" });
+      }
+
+      // Condições de Pagamento (Linha de baixo)
+      if (orc.paymentCond) {
+        doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 100, 100);
+        doc.text("Condições de Pagamento:", margin, y); y += 5;
+        doc.setTextColor(17, 17, 17); doc.setFont("helvetica", "bold");
+        doc.text(orc.paymentCond, margin, y); y += 10;
       }
 
       if (orc.obs) {
@@ -461,7 +471,10 @@ export default function OrcamentoDetalhePage() {
         </div>
 
         <div className={styles.card}>
-          <div className={styles.cardLabel}>Condições de Pagamento</div>
+          <div className={styles.cardLabel}>Chave PIX (E-mail)</div>
+          <div className={styles.paymentText} style={{ fontWeight: "bold" }}>contato@useevo.store</div>
+          
+          <div className={styles.cardLabel} style={{ marginTop: "1rem" }}>Condições de Pagamento</div>
           <div className={styles.paymentText}>{orc.paymentCond || "Não informado"}</div>
           {orc.deliveryTime && (
             <>
