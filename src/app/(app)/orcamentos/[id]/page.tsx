@@ -309,12 +309,14 @@ export default function OrcamentoDetalhePage() {
       }
 
       // Footer
-      const footY = 285;
+      const footY = 273;
       doc.setFillColor(245, 245, 245);
-      doc.rect(0, footY, W, 12, "F");
+      doc.rect(0, footY, W, 24, "F");
       doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(120, 120, 120);
-      doc.text("EVO — Artigos em Couro Premium", W / 2, footY + 5, { align: "center" });
-      doc.text(`Orçamento válido por 7 dias | Gerado em ${new Date().toLocaleDateString("pt-BR")}`, W / 2, footY + 9, { align: "center" });
+      doc.text("EVO ELEGANCIA EM MOVIMENTO LTDA - 62.057.464/0001-91", W / 2, footY + 6, { align: "center" });
+      doc.text("19 98122 6232  |  contato@useevo.store", W / 2, footY + 10, { align: "center" });
+      doc.text("Rua Helena Argentin Canova, 61 - João Aranha | Paulínia-SP", W / 2, footY + 14, { align: "center" });
+      doc.text(`Orçamento válido por 7 dias | Gerado em ${new Date().toLocaleDateString("pt-BR")}`, W / 2, footY + 19, { align: "center" });
 
       const pdfBlob = doc.output('blob');
       const filename = `EVO_Orcamento_${orc.id.slice(-6).toUpperCase()}.pdf`;
