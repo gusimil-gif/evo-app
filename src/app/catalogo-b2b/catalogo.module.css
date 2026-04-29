@@ -1,0 +1,272 @@
+@media print {
+  @page {
+    margin: 0;
+    size: A4 portrait;
+  }
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: #fff !important;
+  }
+}
+
+.catalogPage {
+  background-color: #fcfcfc;
+  font-family: var(--font-inter), sans-serif;
+  color: #111;
+  min-height: 100vh;
+}
+
+.a4Page {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  page-break-after: always;
+}
+
+.printActions {
+  text-align: center;
+  padding: 2rem;
+  background: #111;
+  color: #fff;
+}
+
+.printBtn {
+  background: #fff;
+  color: #111;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.printBtn:hover {
+  opacity: 0.9;
+}
+
+@media print {
+  .a4Page {
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    page-break-after: always;
+    box-shadow: none;
+  }
+  .printActions {
+    display: none !important;
+  }
+}
+
+/* Page 1: Cover */
+.coverPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  background-color: #111;
+}
+
+.coverLogo {
+  width: 180px;
+  margin-bottom: 2rem;
+}
+
+.coverTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 0.5rem;
+}
+
+.coverSubtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #aaa;
+}
+
+.coverImageWrapper {
+  margin-top: 4rem;
+  width: 100%;
+  height: 50%;
+  position: relative;
+}
+
+.coverImage {
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+/* Page 2: About */
+.aboutPage {
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sectionTag {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.aboutTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  color: #111;
+}
+
+.aboutText {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.featureList li {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.featureList li::before {
+  content: "✓";
+  color: #111;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+/* Product Pages */
+.productPage {
+  padding: 60px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.productHeader {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.productTitle {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #111;
+  margin-top: 0.5rem;
+}
+
+.productContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.productImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #f5f5f5;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.productImage {
+  object-fit: cover;
+}
+
+.productDesc {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.diffTitle {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+.colorOptions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.colorOptionText {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Contact Page */
+.contactPage {
+  padding: 60px;
+  background-color: #111;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contactTitle {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.contactDesc {
+  font-size: 1.2rem;
+  color: #aaa;
+  margin-bottom: 4rem;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.contactBox {
+  background: #222;
+  padding: 3rem;
+  border-radius: 12px;
+}
+
+.contactItem {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.contactLabel {
+  font-weight: bold;
+  width: 120px;
+  color: #888;
+}
+
+.contactValue {
+  color: #fff;
+}

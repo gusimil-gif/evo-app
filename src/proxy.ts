@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { decrypt } from './lib/auth';
 
-const publicRoutes = ['/login', '/api/auth/login'];
+const publicRoutes = ['/login', '/api/auth/login', '/catalogo-b2b'];
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -27,5 +27,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };

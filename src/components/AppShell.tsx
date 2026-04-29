@@ -34,7 +34,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* HEADER (Mobile Only) */}
       <header className={styles.mobileHeader}>
         <Image 
-          src="/logo-evo-dark.png" 
+          src="/logo-evo-white.png" 
           alt="EVO" 
           width={50}
           height={50}
@@ -48,7 +48,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <Image 
-            src="/logo-evo-dark.png" 
+            src="/logo-evo-white.png" 
             alt="EVO" 
             className={styles.logoImg} 
             width={100}
