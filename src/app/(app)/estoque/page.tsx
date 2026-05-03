@@ -7,6 +7,7 @@ import styles from "./estoque.module.css";
 interface Product {
   id: string; sku: string; name?: string; description?: string; type?: string; color?: string;
   stock: number; price: number; active: boolean;
+  purchaseCost?: number; packagingCost?: number; shippingCost?: number; totalCost?: number;
 }
 
 export default function EstoquePage() {
@@ -41,6 +42,43 @@ export default function EstoquePage() {
   const zeros = products.filter((p) => p.stock === 0).length;
   const low = products.filter((p) => p.stock > 0 && p.stock <= 3).length;
 
+  const handleExportCSV = () => {
+    const headers = [
+      "SKU", "Descrição", "Tipo", "Cor", "Estoque",
+      "Custo do Produto", "Custo Embalagem", "Custo do Frete", "Custo Total", "Valor de Venda"
+    ];
+
+    const rows = filtered.map(p => {
+      const name = p.description || p.name || p.sku;
+      return [
+        p.sku,
+        `"${name.replace(/"/g, '""')}"`,
+        p.type || "",
+        p.color || "",
+        p.stock,
+        (p.purchaseCost || 0).toFixed(2).replace('.', ','),
+        (p.packagingCost || 0).toFixed(2).replace('.', ','),
+        (p.shippingCost || 0).toFixed(2).replace('.', ','),
+        (p.totalCost || 0).toFixed(2).replace('.', ','),
+        p.price.toFixed(2).replace('.', ',')
+      ];
+    });
+
+    const csvContent = [
+      headers.join(";"),
+      ...rows.map(r => r.join(";"))
+    ].join("\n");
+
+    const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `inventario-${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -48,6 +86,7 @@ export default function EstoquePage() {
           <h1 className={styles.title}>Estoque</h1>
           <p className={styles.sub}>Posição atual de todos os produtos ativos</p>
         </div>
+        <button className={styles.btnExport} onClick={handleExportCSV}>Exportar CSV</button>
       </div>
 
       {/* KPIs */}

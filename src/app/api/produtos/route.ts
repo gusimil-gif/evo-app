@@ -36,6 +36,10 @@ export async function GET(req: Request) {
       type: true,
       color: true,
       active: true,
+      purchaseCost: true,
+      packagingCost: true,
+      shippingCost: true,
+      totalCost: true,
     },
     orderBy: { sku: "asc" },
   });
