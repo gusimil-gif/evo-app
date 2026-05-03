@@ -33,6 +33,11 @@ export default function ProdutoDetailPage() {
   const [movement, setMovement] = useState({ type: "ENTRY", quantity: 1, reason: "", obs: "" });
   const [movSaving, setMovSaving] = useState(false);
 
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [dupForm, setDupForm] = useState({ sku: "", color: "", leather: "" });
+  const [dupSaving, setDupSaving] = useState(false);
+  const [dupError, setDupError] = useState("");
+
   useEffect(() => {
     fetch(`/api/produtos/${id}`)
       .then((r) => r.json())
@@ -84,6 +89,39 @@ export default function ProdutoDetailPage() {
     }
   };
 
+  const handleDuplicate = async () => {
+    if (!dupForm.sku.trim()) { setDupError("SKU é obrigatório"); return; }
+    setDupSaving(true);
+    setDupError("");
+    
+    const payload = {
+      ...product,
+      id: undefined,
+      movements: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
+      stock: 0,
+      sku: dupForm.sku.toUpperCase(),
+      color: dupForm.color,
+      leather: dupForm.leather
+    };
+
+    const res = await fetch("/api/produtos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      router.push(`/produtos/${data.id}`);
+    } else {
+      const data = await res.json();
+      setDupError(data.error || "Erro ao duplicar");
+      setDupSaving(false);
+    }
+  };
+
   const set = (field: string, value: any) => setForm((f: any) => ({ ...f, [field]: value }));
   const setMov = (field: string, value: any) => setMovement((m) => ({ ...m, [field]: value }));
 
@@ -97,7 +135,10 @@ export default function ProdutoDetailPage() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
           <h1 className={styles.title}>{product.name || product.sku}</h1>
           {isAdmin && !editing && (
-            <button className={styles.btnSave} onClick={() => setEditing(true)}>Editar</button>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button className={styles.btnCancel} style={{ cursor: "pointer" }} onClick={() => setShowDuplicateModal(true)}>Duplicar</button>
+              <button className={styles.btnSave} onClick={() => setEditing(true)}>Editar</button>
+            </div>
           )}
           {editing && (
             <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -246,6 +287,31 @@ export default function ProdutoDetailPage() {
           </div>
         )}
       </div>
+
+      {showDuplicateModal && (
+        <div className={detailStyles.modalOverlay}>
+          <div className={detailStyles.modalContent}>
+            <h2 className={detailStyles.modalTitle}>Duplicar Produto</h2>
+            {dupError && <div className={styles.error}>{dupError}</div>}
+            <div>
+              <label className="label">Novo SKU *</label>
+              <input className="input-field" value={dupForm.sku} onChange={(e) => setDupForm({ ...dupForm, sku: e.target.value.toUpperCase() })} placeholder="Ex: C.PR.3E.EV.V2" />
+            </div>
+            <div>
+              <label className="label">Nova Cor</label>
+              <input className="input-field" value={dupForm.color} onChange={(e) => setDupForm({ ...dupForm, color: e.target.value })} placeholder="Ex: Marrom" />
+            </div>
+            <div>
+              <label className="label">Novo Couro</label>
+              <input className="input-field" value={dupForm.leather} onChange={(e) => setDupForm({ ...dupForm, leather: e.target.value })} placeholder="Ex: Floater" />
+            </div>
+            <div className={detailStyles.modalActions}>
+              <button className={styles.btnCancel} onClick={() => setShowDuplicateModal(false)}>Cancelar</button>
+              <button className={styles.btnSave} onClick={handleDuplicate} disabled={dupSaving}>{dupSaving ? "Duplicando..." : "Confirmar Duplicação"}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
