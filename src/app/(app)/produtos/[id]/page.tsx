@@ -30,7 +30,7 @@ export default function ProdutoDetailPage() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<any>({});
   const [showMovement, setShowMovement] = useState(false);
-  const [movement, setMovement] = useState({ type: "ENTRY", quantity: 1, reason: "", obs: "" });
+  const [movement, setMovement] = useState<any>({ type: "ENTRY", quantity: "", reason: "", obs: "" });
   const [movSaving, setMovSaving] = useState(false);
 
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
@@ -75,11 +75,17 @@ export default function ProdutoDetailPage() {
   };
 
   const handleMovement = async () => {
+    const parsedQty = parseInt(String(movement.quantity));
+    if (isNaN(parsedQty)) {
+      alert("Por favor, preencha a quantidade.");
+      return;
+    }
+
     setMovSaving(true);
     const res = await fetch(`/api/estoque/movimentar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId: id, ...movement, quantity: parseInt(String(movement.quantity)) }),
+      body: JSON.stringify({ productId: id, ...movement, quantity: parsedQty }),
     });
     if (res.ok) {
       window.location.reload();
