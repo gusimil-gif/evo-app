@@ -129,7 +129,7 @@ export default function ProdutoDetailPage() {
   };
 
   const set = (field: string, value: any) => setForm((f: any) => ({ ...f, [field]: value }));
-  const setMov = (field: string, value: any) => setMovement((m) => ({ ...m, [field]: value }));
+  const setMov = (field: string, value: any) => setMovement((m: any) => ({ ...m, [field]: value }));
 
   if (loading) return <div className={detailStyles.loading}>Carregando...</div>;
   if (!product) return <div className={detailStyles.loading}>Produto não encontrado.</div>;
