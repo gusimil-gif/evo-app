@@ -13,7 +13,7 @@ export default function NovoProdutoPage() {
   const [form, setForm] = useState({
     sku: "", name: "", type: "", color: "", leather: "",
     brand: "", price: "", costPrice: "",
-    category: "", obs: "", active: true,
+    category: "", obs: "", active: true, description: "",
   });
 
   const set = (field: string, value: any) => setForm((f) => ({ ...f, [field]: value }));
@@ -67,6 +67,11 @@ export default function NovoProdutoPage() {
               <label className="label">Nome Comercial</label>
               <input className="input-field" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Ex: Mochila Slim Vicenza" />
             </div>
+          </div>
+
+          <div>
+            <label className="label">Descrição</label>
+            <input className="input-field" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Ex: Deskpad 90x50 Preto Toledo" />
           </div>
 
           <div className={styles.grid3}>

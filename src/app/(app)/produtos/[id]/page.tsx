@@ -120,6 +120,9 @@ export default function ProdutoDetailPage() {
               {editing ? <input className="input-field" value={form.name || ""} onChange={(e) => set("name", e.target.value)} />
                 : <div className={detailStyles.value}>{product.name || "—"}</div>}</div>
           </div>
+          <div><label className="label">Descrição</label>
+            {editing ? <input className="input-field" value={form.description || ""} onChange={(e) => set("description", e.target.value)} />
+              : <div className={detailStyles.value}>{product.description || "—"}</div>}</div>
           <div className={styles.grid3}>
             <div><label className="label">Tipo</label>
               {editing ? <input className="input-field" value={form.type || ""} onChange={(e) => set("type", e.target.value)} />
