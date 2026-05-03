@@ -77,6 +77,8 @@ export default function RelatoriosPage() {
             <li>Garanta que todos os custos (frete, embalagem) estejam atualizados nos produtos.</li>
           </ul>
         </div>
+      </div>
+
       <div className={styles.detailsGrid} style={{ marginTop: '1.5rem' }}>
         <div className={styles.infoBox}>
           <h3>🔥 Top 5 Mais Vendidos (Curva A)</h3>
