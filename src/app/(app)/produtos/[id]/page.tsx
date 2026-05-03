@@ -12,7 +12,7 @@ interface Product {
   leather?: string; brand?: string; price: number;
   suggestedPrice?: number; purchaseCost?: number; packagingCost?: number;
   shippingCost?: number; otherCosts?: number; totalCost?: number;
-  stock: number; active: boolean; obs?: string; category?: string;
+  stock: number; active: boolean; obs?: string; category?: string; description?: string;
   movements: Array<{ id: string; type: string; quantity: number; date: string; reason?: string; obs?: string; user: { name: string } }>;
 }
 
