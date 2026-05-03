@@ -45,7 +45,7 @@ export default function EstoquePage() {
   const handleExportCSV = () => {
     const headers = [
       "SKU", "Descrição", "Tipo", "Cor", "Estoque",
-      "Custo do Produto", "Custo Embalagem", "Custo do Frete", "Custo Total", "Valor de Venda"
+      "Custo do Produto", "Custo Embalagem", "Custo do Frete", "Custo Total", "Valor de Venda", "Valor Total de Venda"
     ];
 
     const rows = filtered.map(p => {
@@ -60,7 +60,8 @@ export default function EstoquePage() {
         (p.packagingCost || 0).toFixed(2).replace('.', ','),
         (p.shippingCost || 0).toFixed(2).replace('.', ','),
         (p.totalCost || 0).toFixed(2).replace('.', ','),
-        p.price.toFixed(2).replace('.', ',')
+        p.price.toFixed(2).replace('.', ','),
+        (p.price * p.stock).toFixed(2).replace('.', ',')
       ];
     });
 
