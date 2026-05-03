@@ -11,7 +11,8 @@ export async function GET(req: Request) {
   try {
     // 1. Valor em Estoque
     const products = await db.product.findMany({ where: { active: true } });
-    const stockValue = products.reduce((acc, p) => acc + (p.stock * (p.purchaseCost || p.price || 0)), 0);
+    const stockTotalCost = products.reduce((acc, p) => acc + (p.stock * (p.totalCost || p.purchaseCost || 0)), 0);
+    const stockSaleValue = products.reduce((acc, p) => acc + (p.stock * (p.price || 0)), 0);
 
     // 2. Faturamento (Orçamentos SIGNED)
     const budgets = await db.budget.findMany({ 
@@ -28,7 +29,8 @@ export async function GET(req: Request) {
     const customersCount = await db.customer.count();
 
     return new NextResponse(JSON.stringify({
-      stockValue: stockValue || 0,
+      stockTotalCost: stockTotalCost || 0,
+      stockSaleValue: stockSaleValue || 0,
       revenue: revenue || 0,
       totalOrders: totalOrders || 0,
       customersCount: customersCount || 0,
@@ -42,6 +44,6 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     console.error("ERRO STATS:", error);
-    return NextResponse.json({ stockValue: 0, revenue: 0, totalOrders: 0, customersCount: 0 });
+    return NextResponse.json({ stockTotalCost: 0, stockSaleValue: 0, revenue: 0, totalOrders: 0, customersCount: 0 });
   }
 }

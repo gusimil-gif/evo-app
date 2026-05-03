@@ -32,9 +32,15 @@ export default function RelatoriosPage() {
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Valor em Estoque</div>
-          <div className={styles.statValue}>{formatCurrency(stats.stockValue)}</div>
-          <div className={styles.statFooter}>Soma de custo x quantidade</div>
+          <div className={styles.statLabel}>Custo Total (Estoque)</div>
+          <div className={styles.statValue}>{formatCurrency(stats.stockTotalCost)}</div>
+          <div className={styles.statFooter}>Soma de custo total x quantidade</div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={styles.statLabel}>Valor Potencial (Venda)</div>
+          <div className={styles.statValue} style={{ color: "#2563eb" }}>{formatCurrency(stats.stockSaleValue)}</div>
+          <div className={styles.statFooter}>Soma de preço de venda x quantidade</div>
         </div>
 
         <div className={styles.statCard}>
@@ -60,7 +66,7 @@ export default function RelatoriosPage() {
         <div className={styles.infoBox}>
           <h3>📈 Insights de Negócio</h3>
           <p>O valor médio por pedido (Ticket Médio) atual é de <strong>{formatCurrency(stats.revenue / (stats.totalOrders || 1))}</strong>.</p>
-          <p>Seu estoque representa <strong>{((stats.stockValue / (stats.revenue || 1)) * 100).toFixed(1)}%</strong> do seu faturamento bruto atual.</p>
+          <p>Seu estoque representa <strong>{((stats.stockSaleValue / (stats.revenue || 1)) * 100).toFixed(1)}%</strong> do seu faturamento bruto atual, considerando os preços de venda.</p>
         </div>
         
         <div className={styles.infoBox}>
