@@ -212,7 +212,7 @@ export default function ProdutoDetailPage() {
                     <option value="LOSS">Perda/Baixa</option>
                   </select></div>
                 <div><label className="label">Quantidade</label>
-                  <input className="input-field" type="number" min="1" value={movement.quantity} onChange={(e) => setMov("quantity", e.target.value)} /></div>
+                  <input className="input-field" type="number" min={movement.type === "ADJUSTMENT" ? "0" : "1"} value={movement.quantity} onChange={(e) => setMov("quantity", e.target.value)} /></div>
               </div>
               <div><label className="label">Motivo</label>
                 <input className="input-field" value={movement.reason} onChange={(e) => setMov("reason", e.target.value)} placeholder="Ex: Venda, compra, inventário..." /></div>
@@ -233,7 +233,7 @@ export default function ProdutoDetailPage() {
               {product.movements.map((m) => (
                 <div key={m.id} className={detailStyles.movRow}>
                   <span className={`${detailStyles.movType} ${detailStyles["mov" + m.type]}`}>{MOVEMENT_LABELS[m.type]}</span>
-                  <span className={detailStyles.movQty}>{m.type === "EXIT" || m.type === "LOSS" ? "-" : "+"}{m.quantity}</span>
+                  <span className={detailStyles.movQty}>{m.type === "ADJUSTMENT" ? "=" : (m.type === "EXIT" || m.type === "LOSS" ? "-" : "+")}{m.quantity}</span>
                   <span className={detailStyles.movReason}>{m.reason || "—"}</span>
                   <span className={detailStyles.movUser}>{m.user.name}</span>
                   <span className={detailStyles.movDate}>{new Date(m.date).toLocaleDateString("pt-BR")}</span>

@@ -8,8 +8,16 @@ export async function POST(req: Request) {
 
   const { productId, type, quantity, reason, obs } = await req.json();
 
-  if (!productId || !type || !quantity) {
+  if (!productId || !type || quantity === undefined || quantity === null) {
     return NextResponse.json({ error: "Dados incompletos" }, { status: 400 });
+  }
+
+  if (quantity <= 0 && type !== "ADJUSTMENT") {
+    return NextResponse.json({ error: "Quantidade deve ser maior que zero" }, { status: 400 });
+  }
+
+  if (quantity < 0 && type === "ADJUSTMENT") {
+    return NextResponse.json({ error: "Quantidade não pode ser negativa" }, { status: 400 });
   }
 
   const product = await db.product.findUnique({ where: { id: productId } });
