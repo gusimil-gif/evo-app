@@ -61,4 +61,12 @@
   padding: 0.4rem; border-radius: 4px;
 }
 .btnDelete:hover { color: #ef4444; background: #fef2f2; }
+
+.btnWhatsApp {
+  color: #25D366; transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.4rem; border-radius: 4px; background: transparent;
+}
+.btnWhatsApp:hover { transform: scale(1.1); background: #f0fdf4; }
+
 .arrow { color: var(--muted); font-size: 1.2rem; }

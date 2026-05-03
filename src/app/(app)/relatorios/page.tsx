@@ -77,6 +77,38 @@ export default function RelatoriosPage() {
             <li>Garanta que todos os custos (frete, embalagem) estejam atualizados nos produtos.</li>
           </ul>
         </div>
+      <div className={styles.detailsGrid} style={{ marginTop: '1.5rem' }}>
+        <div className={styles.infoBox}>
+          <h3>🔥 Top 5 Mais Vendidos (Curva A)</h3>
+          <ul className={styles.rankingList}>
+            {stats.topSoldProducts?.map((p: any, i: number) => (
+              <li key={p.sku}>
+                <span className={styles.rankNum}>{i + 1}º</span>
+                <span className={styles.rankName}>{p.name} <small>({p.sku})</small></span>
+                <span className={styles.rankQty}>{p.quantity} unid.</span>
+              </li>
+            ))}
+            {(!stats.topSoldProducts || stats.topSoldProducts.length === 0) && (
+              <p className={styles.emptyMsg}>Nenhuma venda registrada ainda.</p>
+            )}
+          </ul>
+        </div>
+        
+        <div className={styles.infoBox}>
+          <h3>📦 Maior Estoque Parado</h3>
+          <ul className={styles.rankingList}>
+            {stats.topStockProducts?.map((p: any, i: number) => (
+              <li key={p.sku}>
+                <span className={styles.rankNum}>{i + 1}º</span>
+                <span className={styles.rankName}>{p.name} <small>({p.sku})</small></span>
+                <span className={styles.rankQty}>{p.stock} unid.</span>
+              </li>
+            ))}
+            {(!stats.topStockProducts || stats.topStockProducts.length === 0) && (
+              <p className={styles.emptyMsg}>Nenhum estoque registrado ainda.</p>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );
