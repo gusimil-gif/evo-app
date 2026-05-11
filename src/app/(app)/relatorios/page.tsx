@@ -68,7 +68,7 @@ export default function RelatoriosPage() {
           <p>O valor médio por pedido (Ticket Médio) atual é de <strong>{formatCurrency(stats.revenue / (stats.totalOrders || 1))}</strong>.</p>
           <p>Seu estoque representa <strong>{((stats.stockSaleValue / (stats.revenue || 1)) * 100).toFixed(1)}%</strong> do seu faturamento bruto atual, considerando os preços de venda.</p>
         </div>
-        
+
         <div className={styles.infoBox}>
           <h3>💡 Recomendações</h3>
           <ul>
@@ -95,7 +95,7 @@ export default function RelatoriosPage() {
             )}
           </ul>
         </div>
-        
+
         <div className={styles.infoBox}>
           <h3>📦 Maior Estoque Parado</h3>
           <ul className={styles.rankingList}>

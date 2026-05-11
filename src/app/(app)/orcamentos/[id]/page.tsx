@@ -17,6 +17,8 @@ interface Orcamento {
   signatureName?: string;
   signatureDate?: string;
   signatureData?: string;
+  stockDeducted: boolean;
+  partner?: { id: string; name: string; type: string };
   total: number;
 }
 
@@ -444,11 +446,22 @@ export default function OrcamentoDetalhePage() {
       {orc.signatureName && (
         <div className={styles.signedCard}>
           <div className={styles.signedIcon}>✓</div>
-          <div>
+          <div style={{ flex: 1 }}>
             <div className={styles.signedName}>{orc.signatureName === "EXTERNAL_VALIDATION" ? "Validado via Link Externo" : orc.signatureName}</div>
             <div className={styles.signedDate}>Validado em {new Date(orc.signatureDate!).toLocaleString("pt-BR")}</div>
+            {orc.stockDeducted && <div style={{ color: "#22c55e", fontSize: "0.8rem", marginTop: "0.25rem", fontWeight: "bold" }}>📦 Estoque baixado automaticamente</div>}
           </div>
           {orc.signatureData && orc.signatureData !== "EXTERNAL_VALIDATION" && <img src={orc.signatureData} alt="Assinatura" className={styles.signatureImg} />}
+        </div>
+      )}
+
+      {orc.status !== "SIGNED" && orc.stockDeducted && (
+        <div className={styles.signedCard} style={{ borderLeft: "4px solid #22c55e" }}>
+           <div className={styles.signedIcon} style={{ background: "#22c55e" }}>📦</div>
+           <div>
+             <div className={styles.signedName}>Estoque Baixado</div>
+             <div className={styles.signedDate}>As mercadorias deste pedido já foram subtraídas do estoque.</div>
+           </div>
         </div>
       )}
 

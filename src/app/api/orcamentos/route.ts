@@ -8,7 +8,11 @@ export async function GET(req: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const orcamentos = await db.budget.findMany({
-    include: { customer: { select: { id: true, name: true, phone: true } }, items: true },
+    include: { 
+      customer: { select: { id: true, name: true, phone: true } }, 
+      partner: { select: { id: true, name: true, type: true } },
+      items: true
+    },
     orderBy: { date: "desc" },
   });
   return NextResponse.json(orcamentos);
@@ -19,16 +23,53 @@ export async function POST(req: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { customerId, paymentCond, deliveryTime, obs, items } = body;
+  const { customerId, partnerId, paymentCond, deliveryTime, obs, items } = body;
 
-  if (!customerId || !items || items.length === 0) {
-    return NextResponse.json({ error: "Cliente e itens são obrigatórios" }, { status: 400 });
+  if (!customerId && !partnerId) {
+    return NextResponse.json({ error: "Cliente ou Parceiro é obrigatório" }, { status: 400 });
+  }
+
+  if (!items || items.length === 0) {
+    return NextResponse.json({ error: "Itens são obrigatórios" }, { status: 400 });
   }
 
   try {
+    let finalCustomerId = customerId;
+
+    // Se informou um parceiro, garantir que ele tenha um registro de "cliente" para manter a integridade do banco
+    if (partnerId && !finalCustomerId) {
+      const partner = await db.partner.findUnique({ where: { id: partnerId } });
+      if (!partner) return NextResponse.json({ error: "Parceiro não encontrado" }, { status: 404 });
+
+      // Tenta achar cliente pelo documento ou nome
+      let customer = await db.customer.findFirst({
+        where: { 
+          OR: [
+            { document: partner.document || undefined },
+            { name: partner.name }
+          ]
+        }
+      });
+
+      if (!customer) {
+        customer = await db.customer.create({
+          data: {
+            name: partner.name,
+            document: partner.document,
+            phone: partner.phone,
+            email: partner.email,
+            address: partner.address,
+            obs: `Criado automaticamente a partir do parceiro ${partner.name}`
+          }
+        });
+      }
+      finalCustomerId = customer.id;
+    }
+
     const orcamento = await db.budget.create({
       data: {
-        customerId,
+        customerId: finalCustomerId,
+        partnerId: partnerId || undefined,
         paymentCond,
         deliveryTime,
         obs,

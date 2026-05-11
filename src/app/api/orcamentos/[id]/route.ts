@@ -11,6 +11,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     where: { id },
     include: {
       customer: true,
+      partner: true,
       items: { include: { product: { select: { sku: true, name: true } } } },
     },
   });
@@ -26,24 +27,64 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { id } = await params;
     const data = await req.json();
     
-    // Capturar metadados para auditoria LGPD no ambiente logado também
     const ip = req.headers.get("x-forwarded-for") || "unknown";
     const agent = req.headers.get("user-agent") || "unknown";
 
-    const orc = await db.budget.update({ 
-      where: { id }, 
-      data: { 
-        status: data.status || undefined, 
-        paymentCond: data.paymentCond || undefined, 
-        obs: data.obs || undefined,
-        signatureName: data.signatureName || undefined,
-        signatureDate: data.signatureDate || undefined,
-        signatureData: data.signatureData || undefined,
-        validationIp: ip,
-        validationAgent: agent
-      } 
+    // Buscar orçamento atual para verificar se já foi baixado
+    const existing = await db.budget.findUnique({ 
+      where: { id },
+      include: { items: true }
     });
-    return NextResponse.json(orc);
+    if (!existing) return NextResponse.json({ error: "Orçamento não encontrado" }, { status: 404 });
+
+    // Lógica de baixa de estoque: ocorre quando o status muda para SIGNED e ainda não foi baixado
+    const isFinalizing = data.status === "SIGNED" && !existing.stockDeducted;
+
+    const updated = await db.$transaction(async (tx) => {
+      // 1. Atualizar o orçamento
+      const orc = await tx.budget.update({ 
+        where: { id }, 
+        data: { 
+          status: data.status || undefined, 
+          paymentCond: data.paymentCond || undefined, 
+          obs: data.obs || undefined,
+          signatureName: data.signatureName || undefined,
+          signatureDate: data.signatureDate || undefined,
+          signatureData: data.signatureData || undefined,
+          partnerId: data.partnerId || undefined,
+          validationIp: ip,
+          validationAgent: agent,
+          stockDeducted: isFinalizing ? true : undefined
+        } 
+      });
+
+      // 2. Se estiver finalizando, baixar estoque de cada item
+      if (isFinalizing) {
+        for (const item of existing.items) {
+          // Registrar movimentação de saída
+          await tx.inventoryMovement.create({
+            data: {
+              productId: item.productId,
+              type: "EXIT",
+              quantity: item.quantity,
+              userId: session.userId as string,
+              reason: `Pedido #${orc.id.slice(-6).toUpperCase()}`,
+              obs: `Baixa automática via validação de pedido.`
+            }
+          });
+
+          // Atualizar saldo no produto
+          await tx.product.update({
+            where: { id: item.productId },
+            data: { stock: { decrement: item.quantity } }
+          });
+        }
+      }
+
+      return orc;
+    });
+
+    return NextResponse.json(updated);
   } catch (error: any) {
     console.error("ERRO UPDATE ORÇAMENTO:", error);
     return NextResponse.json({ error: error.message || "Erro interno na atualização" }, { status: 500 });

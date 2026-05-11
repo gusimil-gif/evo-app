@@ -46,8 +46,9 @@ function NovoOrcamentoForm() {
   const preClienteId = searchParams.get("clienteId") ?? "";
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [partners, setPartners] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [clienteId, setClienteId] = useState(preClienteId);
+  const [clienteId, setClienteId] = useState(preClienteId); // Pode conter prefixo part_ ou cust_
   const [paymentCond, setPaymentCond] = useState(PAYMENT_OPTIONS[0]);
   const [deliveryTime, setDeliveryTime] = useState(DELIVERY_OPTIONS[0]);
   const [customPayment, setCustomPayment] = useState("");
@@ -62,6 +63,7 @@ function NovoOrcamentoForm() {
 
   useEffect(() => {
     fetch("/api/clientes").then((r) => r.json()).then(setClientes);
+    fetch("/api/parceiros").then((r) => r.json()).then((d) => setPartners(Array.isArray(d) ? d : []));
     fetch("/api/produtos?active=true").then((r) => r.json()).then(setProducts);
   }, []);
 
@@ -105,23 +107,27 @@ function NovoOrcamentoForm() {
 
   const handleSubmit = async () => {
     setError("");
-    if (!clienteId) { setError("Selecione um cliente"); return; }
+    if (!clienteId) { setError("Selecione um cliente ou parceiro"); return; }
     if (items.length === 0) { setError("Adicione pelo menos um item"); return; }
     setSaving(true);
 
     try {
+      const isPartner = clienteId.startsWith("part_");
+      const id = isPartner ? clienteId.replace("part_", "") : clienteId.replace("cust_", "");
+
       const res = await fetch("/api/orcamentos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerId: clienteId,
+          customerId: isPartner ? undefined : id,
+          partnerId: isPartner ? id : undefined,
           paymentCond: paymentCond === "Outro" ? customPayment : paymentCond,
           deliveryTime,
           obs,
           items: items.map((it) => ({
             productId: it.productId,
             sku: it.sku,
-            description: it.description, // Mapeia corretamente para o banco
+            description: it.description,
             color: it.color,
             defaultPrice: it.defaultPrice,
             appliedPrice: parseFloat(it.appliedPrice) || 0,
@@ -155,13 +161,19 @@ function NovoOrcamentoForm() {
       {error && <div className={styles.error}>{error}</div>}
 
       <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Cliente</h2>
+        <h2 className={styles.cardTitle}>Cliente / Parceiro</h2>
         <select className="input-field" value={clienteId} onChange={(e) => setClienteId(e.target.value)}>
-          <option value="">Selecione um cliente...</option>
-          {clientes.map((c) => <option key={c.id} value={c.id}>{c.name}{c.phone ? ` — ${c.phone}` : ""}</option>)}
+          <option value="">Selecione...</option>
+          <optgroup label="Clientes">
+            {clientes.map((c) => <option key={c.id} value={`cust_${c.id}`}>{c.name}{c.phone ? ` — ${c.phone}` : ""}</option>)}
+          </optgroup>
+          <optgroup label="Parceiros">
+            {partners.map((p) => <option key={p.id} value={`part_${p.id}`}>{p.name} ({p.type})</option>)}
+          </optgroup>
         </select>
-        <div style={{ marginTop: "0.5rem" }}>
-          <Link href="/clientes/novo" style={{ fontSize: "0.8rem", color: "var(--muted)" }}>+ Cadastrar novo cliente</Link>
+        <div style={{ marginTop: "0.5rem", display: "flex", gap: "1rem" }}>
+          <Link href="/clientes/novo" style={{ fontSize: "0.8rem", color: "var(--muted)" }}>+ Novo cliente</Link>
+          <Link href="/parceiros" style={{ fontSize: "0.8rem", color: "var(--muted)" }}>+ Novo parceiro</Link>
         </div>
       </div>
 
