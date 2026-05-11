@@ -22,7 +22,16 @@ export default function OrcamentosPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/orcamentos").then((r) => r.json()).then((d) => { setOrcamentos(d); setLoading(false); });
+    fetch("/api/orcamentos")
+      .then((r) => r.json())
+      .then((d) => { 
+        setOrcamentos(Array.isArray(d) ? d : []); 
+        setLoading(false); 
+      })
+      .catch((err) => {
+        console.error("Erro ao carregar orçamentos:", err);
+        setLoading(false);
+      });
   }, []);
 
   const total = (orc: Orcamento) => orc.items.reduce((s, i) => s + i.total, 0);

@@ -20,12 +20,7 @@ export default function ParceirosPage() {
     fetch("/api/parceiros")
       .then(r => r.json())
       .then(d => { 
-        if (Array.isArray(d)) {
-          setPartners(d); 
-        } else {
-          console.error("Resposta inválida da API:", d);
-          setPartners([]);
-        }
+        setPartners(Array.isArray(d) ? d : []);
         setLoading(false); 
       })
       .catch(err => {

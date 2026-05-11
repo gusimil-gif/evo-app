@@ -19,7 +19,15 @@ export default function ClientesPage() {
 
   const load = () => {
     fetch(`/api/clientes?q=${encodeURIComponent(debounced)}`)
-      .then((r) => r.json()).then((d) => { setClientes(d); setLoading(false); });
+      .then((r) => r.json())
+      .then((d) => { 
+        setClientes(Array.isArray(d) ? d : []); 
+        setLoading(false); 
+      })
+      .catch((err) => {
+        console.error("Erro ao carregar clientes:", err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => { setLoading(true); load(); }, [debounced]);
